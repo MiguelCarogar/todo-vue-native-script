@@ -1,6 +1,6 @@
 <template>
   <Page class="page">
-    <ActionBar title="My Tasks" class="action-bar">
+    <ActionBar title="My Products" class="action-bar">
       <ActionItem @tap="$showModal(addProduct)"
         ios.systemIcon="4" ios.position="right"
         android.systemIcon="ic_menu_add" android.position="actionBar"
@@ -16,9 +16,12 @@
             <ActivityIndicator horizontalAlignment="center" top="50" width="10" height="50" :busy="isBusy" />
           </StackLayout>
 
-          <ListView class="list-group" for="product in productsToBuy" @itemTap="onNormalProductTap" style="height:75%" separatorColor="transparent" > 
+          <ListView class="list-group" for="product, index in productsToBuy" style="height:75%" separatorColor="transparent" > 
             <v-template>
-              <Label id="active-task" :text="product" class="list-group-item-heading" textWrap="true" />
+              <GridLayout columns="*, 200" rows="*">
+                <Label row="0" col="0" id="active-task" :text="product" class="list-group-item-heading" textWrap="true" />
+                <Button row="0" col="1" text="Mark as bought" @tap="onNormalProductTap(product, index)" />
+              </GridLayout>
             </v-template>
           </ListView>
         </StackLayout>
@@ -28,9 +31,12 @@
           <StackLayout>
             <ActivityIndicator horizontalAlignment="center" top="50" width="10" height="50" :busy="isBusy" />
           </StackLayout>
-          <ListView class="list-group" for="product in boughtProducts" @itemTap="onBoughtProductTap" style="height:75%" separatorColor="transparent">
+          <ListView class="list-group" for="product, index in boughtProducts" style="height:75%" separatorColor="transparent">
             <v-template>
-              <Label id="completed-task" :text="product" class="list-group-item-heading" textWrap="true" />
+              <GridLayout columns="*, 200" rows="*">
+                <Label row="0" col="0" id="completed-task" :text="product" class="list-group-item-heading" textWrap="true" />
+                <Button row="0" col="1" text="Mark as to Buy" @tap="onBoughtProductTap(product, index)" />
+              </GridLayout>  
             </v-template>
           </ListView>
         </StackLayout>
@@ -54,12 +60,12 @@ export default {
   },
 
   methods: {
-    onNormalProductTap: function(args) {
-      this.$store.commit('addBoughtProduct', args.item, args.index);
+    onNormalProductTap: function(product, index) {
+      this.$store.commit('addBoughtProduct', product, index);
     },
 
-    onBoughtProductTap: function(args) {
-      this.$store.commit('addProductToBuy', args.item, args.index);
+    onBoughtProductTap: function(product, index) {
+      this.$store.commit('addProductToBuy', product, index);
     },
   },
 
